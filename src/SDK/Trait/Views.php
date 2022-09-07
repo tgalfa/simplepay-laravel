@@ -65,6 +65,13 @@ trait Views
         }
     }
 
+    public function getPaymentUrl()
+    {
+        if (isset($this->returnData['paymentUrl']) && $this->returnData['paymentUrl'] != '') {
+            $this->returnData['form'] = $this->returnData['paymentUrl'];
+        }
+    }
+
     /**
      * Notification based on back data
      *

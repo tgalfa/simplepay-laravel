@@ -20,15 +20,22 @@ return [
 
     //common return URL
     //'URL' => env('SP_URL_RETURN', 'http://'.$_SERVER['HTTP_HOST'].'/back.php'),
-    'URL' => env('SP_URL_RETURN'),
 
-    //optional uniq URL for events
-    /*
- 'URLS_SUCCESS' => 'http://' . $_SERVER['HTTP_HOST'] . '/success.php',       //url for successful payment
- 'URLS_FAIL' => 'http://' . $_SERVER['HTTP_HOST'] . '/fail.php',             //url for unsuccessful
- 'URLS_CANCEL' => 'http://' . $_SERVER['HTTP_HOST'] . '/cancel.php',         //url for cancell on payment page
- 'URLS_TIMEOUT' => 'http://' . $_SERVER['HTTP_HOST'] . '/timeout.php',       //url for payment page timeout
- */
+    // BELOW USE NAMED ROUTES AS PARAMETERS FOR ROUTE NAME
+    'URL' => env('SP_URL_RETURN', 'simplepay.success-page'),
+
+    'SUCCESS_PAGE' => env('SP_SUCCESS_PAGE', false),
+    'SUCCESS_PAGE_ROUTE_NAME' => env('SP_SUCCESS_PAGE_ROUTE_NAME', 'simplepay.success-page'),
+
+    'FAIL_PAGE' => env('SP_FAIL_PAGE', false),
+    'FAIL_PAGE_ROUTE_NAME' => env('SP_FAIL_PAGE_ROUTE_NAME', 'simplepay.fail-page'),
+
+    'CANCEL_PAGE' => env('SP_CANCEL_PAGE', false),
+    'CANCEL_PAGE_ROUTE_NAME' => env('SP_CANCEL_PAGE_ROUTE_NAME', 'simplepay.cancel-page'),
+
+    'TIMEOUT_PAGE' => env('SP_TIMEOUT_PAGE', false),
+    'TIMEOUT_PAGE_ROUTE_NAME' => env('SP_TIMEOUT_PAGE_ROUTE_NAME', 'simplepay.timeout-page'),
+    // ABOVE USE NAMED ROUTES
 
     'GET_DATA' => (isset($_GET['r']) && isset($_GET['s'])) ? ['r' => $_GET['r'], 's' => $_GET['s']] : [],
     'POST_DATA' => $_POST,

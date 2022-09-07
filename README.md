@@ -1,4 +1,4 @@
-# Very short description of the package
+# SimplePay for Laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/zoparga/simplepay-laravel.svg?style=flat-square)](https://packagist.org/packages/zoparga/simplepay-laravel)
 [![Total Downloads](https://img.shields.io/packagist/dt/zoparga/simplepay-laravel.svg?style=flat-square)](https://packagist.org/packages/zoparga/simplepay-laravel)
@@ -18,9 +18,8 @@ Publish config file
 
 Please check examples.
 
-```php
-// Usage description here
-```
+Currently one is fully finished. [Here you can find it.](./_examples/StartPayByUrl.php)
+
 
 ### Changelog
 
