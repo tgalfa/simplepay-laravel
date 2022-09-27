@@ -221,20 +221,20 @@ class SimplePayLaravel
         //-----------------------------------------------------------------------------------------
 
         // common URL for all result
-        $trx->addData('url', route($config['URL']));
+        $trx->addData('url', $config['URL']);
 
         // uniq URL for every result type
         if ($config['SUCCESS_PAGE']) {
-            $trx->addGroupData('urls', 'success', route($config['SUCCESS_PAGE_ROUTE_NAME']));
+            $trx->addGroupData('urls', 'success', $config['SUCCESS_PAGE_ROUTE_NAME']);
         }
         if ($config['FAIL_PAGE']) {
-            $trx->addGroupData('urls', 'fail', route($config['FAIL_PAGE_ROUTE_NAME']));
+            $trx->addGroupData('urls', 'fail', $config['FAIL_PAGE_ROUTE_NAME']);
         }
         if ($config['CANCEL_PAGE']) {
-            $trx->addGroupData('urls', 'cancel', route($config['CANCEL_PAGE_ROUTE_NAME']));
+            $trx->addGroupData('urls', 'cancel', $config['CANCEL_PAGE_ROUTE_NAME']);
         }
         if ($config['TIMEOUT_PAGE']) {
-            $trx->addGroupData('urls', 'timeout', route($config['TIMEOUT_PAGE_ROUTE_NAME']));
+            $trx->addGroupData('urls', 'timeout', $config['TIMEOUT_PAGE_ROUTE_NAME']);
         }
 
         // Redirect from Simple app to merchant app
