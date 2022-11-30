@@ -35,7 +35,6 @@
     "scripts": {
         "test": "vendor/bin/phpunit",
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
-
     },
     "config": {
         "sort-packages": true
@@ -43,10 +42,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "zoparga\\SimplePayLaravel\\SimplepayLaravelServiceProvider"
+                "zoparga\\SimplePayLaravel\\SimplePayLaravelServiceProvider"
             ],
             "aliases": {
-                "SimplePayLaravel": "zoparga\\SimplePayLaravel\\SimplepayLaravelFacade"
+                "SimplePayLaravel": "zoparga\\SimplePayLaravel\\SimplePayLaravelFacade"
             }
         }
     }

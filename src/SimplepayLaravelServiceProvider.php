@@ -4,7 +4,7 @@ namespace zoparga\SimplePayLaravel;
 
 use Illuminate\Support\ServiceProvider;
 
-class SimplepayLaravelServiceProvider extends ServiceProvider
+class SimplePayLaravelServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
