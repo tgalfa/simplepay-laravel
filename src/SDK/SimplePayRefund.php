@@ -40,7 +40,8 @@ class SimplePayRefund extends Base
             unset($this->transactionBase['transactionId']);
         }
         $this->logTransactionId = @$this->transactionBase['transactionId'];
-        $this->logOrderRef = @$this->transactionBase['orderRef'];
+        //dd(@$this->transactionBase['orderRef']);
+        //$this->logOrderRef = @$this->transactionBase['orderRef'];
 
         return $this->execApiCall();
     }

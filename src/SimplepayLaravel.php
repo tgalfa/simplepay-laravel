@@ -221,6 +221,7 @@ class SimplePayLaravel
         //-----------------------------------------------------------------------------------------
 
         // common URL for all result
+
         $trx->addData('url', $config['URL']);
 
         // uniq URL for every result type
@@ -287,7 +288,7 @@ class SimplePayLaravel
 
         //return the URL
         //-----------------------------------------------------------------------------------------
-        return $trx->returnData['paymentUrl'];
+        return $trx->returnData;
     }
 
     public function initDefaults()
