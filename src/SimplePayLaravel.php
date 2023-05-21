@@ -28,6 +28,8 @@ class SimplePayLaravel
 
     public $address = 'Address 1';
 
+    public $trx = null;
+
     public static function prepare()
     {
         return new static;
@@ -110,27 +112,27 @@ class SimplePayLaravel
         return $this;
     }
 
-    public function send()
+    public function createTransaction()
     {
         $config = config('simplepay-laravel');
 
-        $trx = new SimplePayStart;
+        $this->trx = new SimplePayStart;
 
         $this->initDefaults();
         // MAGIC HAPPENS HERE
 
-        $trx->addData('currency', $this->currency);
+        $this->trx->addData('currency', $this->currency);
 
-        $trx->addConfig($config);
+        $this->trx->addConfig($config);
 
         //ORDER PRICE/TOTAL
         //-----------------------------------------------------------------------------------------
-        $trx->addData('total', $this->totalPrice);
+        $this->trx->addData('total', $this->totalPrice);
 
         //ORDER ITEMS
         //-----------------------------------------------------------------------------------------
         /*
-        $trx->addItems(
+        $this->trx->addItems(
             array(
                 'ref' => 'Product ID 1',
                 'title' => 'Product name 1',
@@ -141,7 +143,7 @@ class SimplePayLaravel
                 )
         );
 
-        $trx->addItems(
+        $this->trx->addItems(
             array(
                 'ref' => 'Product ID 2',
                 'title' => 'Product name 2',
@@ -155,44 +157,44 @@ class SimplePayLaravel
 
         // OPTIONAL DATA INPUT ON PAYMENT PAGE
         //-----------------------------------------------------------------------------------------
-        //$trx->addData('maySelectEmail', true);
-        //$trx->addData('maySelectInvoice', true);
-        //$trx->addData('maySelectDelivery', ['HU']);
+        //$this->trx->addData('maySelectEmail', true);
+        //$this->trx->addData('maySelectInvoice', true);
+        //$this->trx->addData('maySelectDelivery', ['HU']);
 
         // SHIPPING COST
         //-----------------------------------------------------------------------------------------
-        //$trx->addData('shippingCost', 20);
+        //$this->trx->addData('shippingCost', 20);
 
         // DISCOUNT
         //-----------------------------------------------------------------------------------------
-        //$trx->addData('discount', 10);
+        //$this->trx->addData('discount', 10);
 
         // ORDER REFERENCE NUMBER
         // uniq oreder reference number in the merchant system
         //-----------------------------------------------------------------------------------------
-        $trx->addData('orderRef', str_replace(['.', ':', '/'], '', @$_SERVER['SERVER_ADDR']).@date('U', time()).rand(1000, 9999));
+        $this->trx->addData('orderRef', str_replace(['.', ':', '/'], '', @$_SERVER['SERVER_ADDR']).@date('U', time()).rand(1000, 9999));
 
         // CUSTOMER
         // customer's name
         //-----------------------------------------------------------------------------------------
-        //$trx->addData('customer', 'v2 SimplePay Teszt');
+        //$this->trx->addData('customer', 'v2 SimplePay Teszt');
 
         // customer's registration mehod
         // 01: guest
         // 02: registered
         // 05: third party
         //-----------------------------------------------------------------------------------------
-        $trx->addData('threeDSReqAuthMethod', '02');
+        $this->trx->addData('threeDSReqAuthMethod', '02');
 
         // EMAIL
         // customer's email
         //-----------------------------------------------------------------------------------------
-        $trx->addData('customerEmail', $this->email);
+        $this->trx->addData('customerEmail', $this->email);
 
         // LANGUAGE
         // HU, EN, DE, etc.
         //-----------------------------------------------------------------------------------------
-        $trx->addData('language', $this->language);
+        $this->trx->addData('language', $this->language);
 
         // TWO STEP
         // true, or false
@@ -201,7 +203,7 @@ class SimplePayLaravel
         //-----------------------------------------------------------------------------------------
         /*
         if (isset($_REQUEST['twoStep'])) {
-            $trx->addData('twoStep', true);
+            $this->trx->addData('twoStep', true);
         }
         */
 
@@ -210,65 +212,64 @@ class SimplePayLaravel
         //-----------------------------------------------------------------------------------------
         $timeoutInSec = 600;
         $timeout = @date('c', time() + $timeoutInSec);
-        $trx->addData('timeout', $timeout);
+        $this->trx->addData('timeout', $timeout);
 
         // METHODS
         // CARD or WIRE
         //-----------------------------------------------------------------------------------------
-        $trx->addData('methods', ['CARD']);
+        $this->trx->addData('methods', ['CARD']);
 
         // REDIRECT URLs
         //-----------------------------------------------------------------------------------------
 
         // common URL for all result
-
-        $trx->addData('url', $config['URL']);
+        $this->trx->addData('url', $config['URL']);
 
         // uniq URL for every result type
         if ($config['SUCCESS_PAGE']) {
-            $trx->addGroupData('urls', 'success', $config['SUCCESS_PAGE_ROUTE_NAME']);
+            $this->trx->addGroupData('urls', 'success', $config['SUCCESS_PAGE_ROUTE_NAME']);
         }
         if ($config['FAIL_PAGE']) {
-            $trx->addGroupData('urls', 'fail', $config['FAIL_PAGE_ROUTE_NAME']);
+            $this->trx->addGroupData('urls', 'fail', $config['FAIL_PAGE_ROUTE_NAME']);
         }
         if ($config['CANCEL_PAGE']) {
-            $trx->addGroupData('urls', 'cancel', $config['CANCEL_PAGE_ROUTE_NAME']);
+            $this->trx->addGroupData('urls', 'cancel', $config['CANCEL_PAGE_ROUTE_NAME']);
         }
         if ($config['TIMEOUT_PAGE']) {
-            $trx->addGroupData('urls', 'timeout', $config['TIMEOUT_PAGE_ROUTE_NAME']);
+            $this->trx->addGroupData('urls', 'timeout', $config['TIMEOUT_PAGE_ROUTE_NAME']);
         }
 
         // Redirect from Simple app to merchant app
         //-----------------------------------------------------------------------------------------
-        //$trx->addGroupData('mobilApp', 'simpleAppBackUrl', 'myAppS01234://payment/123456789');
+        //$this->trx->addGroupData('mobilApp', 'simpleAppBackUrl', 'myAppS01234://payment/123456789');
 
         // INVOICE DATA
         //-----------------------------------------------------------------------------------------
 
-        $trx->addGroupData('invoice', 'name', $this->name);
+        $this->trx->addGroupData('invoice', 'name', $this->name);
         if (empty($this->company)) {
-            $trx->addGroupData('invoice', 'company', $this->company);
+            $this->trx->addGroupData('invoice', 'company', $this->company);
         }
-        $trx->addGroupData('invoice', 'country', $this->country);
-        $trx->addGroupData('invoice', 'state', $this->state);
-        $trx->addGroupData('invoice', 'city', $this->city);
-        $trx->addGroupData('invoice', 'zip', $this->zip);
-        $trx->addGroupData('invoice', 'address', $this->address);
-        //$trx->addGroupData('invoice', 'address2', 'Address 2');
-        //$trx->addGroupData('invoice', 'phone', '06201234567');
+        $this->trx->addGroupData('invoice', 'country', $this->country);
+        $this->trx->addGroupData('invoice', 'state', $this->state);
+        $this->trx->addGroupData('invoice', 'city', $this->city);
+        $this->trx->addGroupData('invoice', 'zip', $this->zip);
+        $this->trx->addGroupData('invoice', 'address', $this->address);
+        //$this->trx->addGroupData('invoice', 'address2', 'Address 2');
+        //$this->trx->addGroupData('invoice', 'phone', '06201234567');
 
         // DELIVERY DATA
         //-----------------------------------------------------------------------------------------
         /*
-        $trx->addGroupData('delivery', 'name', 'SimplePay V2 Tester');
-        $trx->addGroupData('delivery', 'company', '');
-        $trx->addGroupData('delivery', 'country', 'hu');
-        $trx->addGroupData('delivery', 'state', 'Budapest');
-        $trx->addGroupData('delivery', 'city', 'Budapest');
-        $trx->addGroupData('delivery', 'zip', '1111');
-        $trx->addGroupData('delivery', 'address', 'Address 1');
-        $trx->addGroupData('delivery', 'address2', '');
-        $trx->addGroupData('delivery', 'phone', '06203164978');
+        $this->trx->addGroupData('delivery', 'name', 'SimplePay V2 Tester');
+        $this->trx->addGroupData('delivery', 'company', '');
+        $this->trx->addGroupData('delivery', 'country', 'hu');
+        $this->trx->addGroupData('delivery', 'state', 'Budapest');
+        $this->trx->addGroupData('delivery', 'city', 'Budapest');
+        $this->trx->addGroupData('delivery', 'zip', '1111');
+        $this->trx->addGroupData('delivery', 'address', 'Address 1');
+        $this->trx->addGroupData('delivery', 'address2', '');
+        $this->trx->addGroupData('delivery', 'phone', '06203164978');
         */
 
         //payment starter element
@@ -276,19 +277,17 @@ class SimplePayLaravel
         // button: (default setting)
         // link: link to payment page
         //-----------------------------------------------------------------------------------------
-        $trx->formDetails['element'] = 'link';
+        $this->trx->formDetails['element'] = 'link';
 
         //create transaction in SimplePay system
         //-----------------------------------------------------------------------------------------
-        $trx->runStart();
+        $this->trx->runStart();
 
         //create html form for payment using by the created transaction
         //-----------------------------------------------------------------------------------------
-        $trx->getPaymentUrl();
+        $this->trx->getPaymentUrl();
 
-        //return the URL
-        //-----------------------------------------------------------------------------------------
-        return $trx->returnData;
+        return $this->trx->returnData;
     }
 
     public function initDefaults()
