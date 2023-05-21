@@ -12,7 +12,7 @@ composer require zoparga/simplepay-laravel
 ```
 Publish config file
 
-```php artisan vendor:publish --provider="zoparga\SimplePayLaravel\SimplepayLaravelServiceProvider" --tag="config"```
+```php artisan vendor:publish --provider="zoparga\SimplePayLaravel\SimplePayLaravelServiceProvider" --tag="config"```
 
 ## Usage
 
